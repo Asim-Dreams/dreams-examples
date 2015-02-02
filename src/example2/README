@@ -1,0 +1,8 @@
+
+HOW TO:
+
+make
+./dreams_test2
+ dreams -adf test2_adf.xml dral_trace.drl.gz
+
+
