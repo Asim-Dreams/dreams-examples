@@ -17,16 +17,16 @@ int main(){
  
     // Create the nodes of the pipeline
 
-    auto fetch = server->NewNode("fetch", -1);
-    auto execute = server->NewNode("execute", -1);
-    auto commit = server->NewNode("commit", -1);
-    auto done = server->NewNode("commit", -1);
+    auto fetch = server->NewNode("fetch", 0);
+    auto execute = server->NewNode("execute", 1);
+    auto commit = server->NewNode("commit", 2);
+    auto done = server->NewNode("done", 3);
 
     // Create the edges of the pipeline
 
     auto fetch2execute = server->NewEdge(fetch, execute, 1, 1, "fetch");
     auto execute2commit = server->NewEdge(execute, commit, 1, 1, "execute");
-    auto commit2done = server->NewEdge(commit, done, 1, 1, "done");
+    auto commit2done = server->NewEdge(commit, done, 1, 1, "commit");
 
     // Hack to initialize items to an illegal value
 
@@ -50,7 +50,7 @@ int main(){
                        "BR 0"};
 
     //"clock" our system using a for loop.
-
+    server->StartActivity(0);
     for (cycle= 0; cycle < MAX_CYCLES; cycle++){
 
         //Signal to the server that we are starting a new cycle for events to occur

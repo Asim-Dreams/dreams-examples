@@ -14,23 +14,6 @@
 	<tagdescriptor tagname="PC" type="integer" base="16"/>
 
 	<!-- ............................................................................... -->
-	<!-- .. Shade Table Descriptors                                                   .. -->
-	<!-- .. You might want to color a row using a shade of colors. This descriptors   .. -->
-	<!-- .. specify the different colors of the table (interpolation is automatically .. -->
-	<!-- .. done). Mandatory are the 100% and 0% occupancy, the other occupancies are .. -->
-	<!-- .. optional, and must be written in order.                                   .. -->
-	<!-- ............................................................................... -->
-	<shadetable name="temperatureShading">
-		<shade color="red"    occupancy="100%"/>  <!-- mandatory -->
-		<shade color="cyan"   occupancy="50%"/>
-		<shade color="green"  occupancy="0%"/>    <!-- mandatory -->
-	</shadetable>
-	<shadetable name="temperatureShading2">
-		<shade color="red"    occupancy="100%"/>  <!-- mandatory -->
-		<shade color="yellow" occupancy="0%"/>    <!-- mandatory -->
-	</shadetable>
-
-	<!-- ............................................................................... -->
 	<!-- .. Item window Descriptors                                                   .. -->
 	<!-- .. Item window is used to show a list of items distributted in different     .. -->
 	<!-- .. tabs. The user can specify the coloring with rules, what tabs want and    .. -->
@@ -102,12 +85,29 @@
 	<!-- ..	of the tag (for interpolation purposes) and you will see a shaded row.    .. -->
 	<!-- ............................................................................... -->
 	<dreams2>
-		<group name="front-end">
-			<edge name="FETCH_EDGE">
+		<group name="pipeline">
+			<edge name="fetch">
 				<rule>
-					shape="rectangle";
-			        fcolor="blue";
-					
+                    if (item_inside()){
+					    shape="rectangle";
+			            fcolor="blue";	
+                    }
+				</rule>
+			</edge>
+			<edge name="execute">
+				<rule>
+                    if (item_inside()){
+					    shape="rectangle";
+			            fcolor="blue";	
+                    }
+				</rule>
+			</edge>
+			<edge name="commit">
+				<rule>
+                    if (item_inside()){
+					    shape="rectangle";
+			            fcolor="blue";	
+                    }
 				</rule>
 			</edge>
 		</group>
