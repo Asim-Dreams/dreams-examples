@@ -1,0 +1,36 @@
+-----------------------------------
+    EXAMPLE 5: Instruction Dependency Stalls
+-----------------------------------
+
+This example is meant to introduce the idea of displaying DRAL item 
+dependencies in the trace. The CPU pipeline model from Example 4 is 
+used. When an instruction cannot be scheduled due to a dependency with 
+the currently executing instruction, that DRAL item is annotated. When
+viewed in Dreams, if desired the 
+
+
+-----------------------------------
+    HOW TO RUN:
+-----------------------------------
+
+make
+./dreams_test5
+dreams dral_trace.drl.gz
+
+-----------------------------------
+    IN THIS EXAMPLE:
+-----------------------------------
+instruction.h:
+- Function SetDependency(instr) sets which instruction is causing the current 
+    instruction to stall. This function is called in dreams_test5.cpp
+- The tag "ANCESTOR" is a key word which signifies the dependency 
+- Note that SetItemTag must have a setofvalues (array) passed as a parameter, in 
+    order to get the dependency working.
+
+test5_adf.xml:
+- Inclusion of ANCESTOR as a Tag of type setofvalues
+
+Dreams: 
+- To show the dependency edge of a stalled instruction in the Schedule stage, 
+    Right click the stalled instruction -> Event Tools -> Relationship Scan
+

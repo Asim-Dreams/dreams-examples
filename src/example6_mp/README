@@ -1,0 +1,33 @@
+-----------------------------------
+    EXAMPLE 6: Multi-core CPU
+-----------------------------------
+
+This example is meant to introduce the idea of executeable ADFs, which
+are useful to parameterize ADFs. The CPU pipeline model is extended to 
+enable a multi-core CPU.
+
+-----------------------------------
+    HOW TO RUN:
+-----------------------------------
+
+make
+./dreams_test6
+dreams dral_trace.drl.gz
+
+-----------------------------------
+    IN THIS EXAMPLE:
+-----------------------------------
+dreams_test5.cpp:
+- Comment(0x05E7) sets an enviroment variable in Dreams, to facilitate
+    passing parameters into the executable ADF. Note that the Comment() 
+    functions that set environment variables must be called *before*
+    the ADF is embedded
+- Write an environmental variable PERFMODEL_NUM_CPUS 
+- Embedded adf is actually a perl script. Dreams determines that the ADF
+    is executable is the first line of the embedded ADF includes "#!" or ":"
+
+test6.adf.pl:
+- Perl script which generates the ADF
+- Note that the environment variable PERFMODEL_NUM_CPUS read
+- When executed in dreams, dreams reads directly from STDOUT.
+

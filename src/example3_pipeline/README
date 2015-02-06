@@ -1,0 +1,29 @@
+-----------------------------------
+    EXAMPLE 3: CPU Pipeline
+-----------------------------------
+
+This example is meant to introduce the idea of conditional coloring in 
+the ADF. There is a CPU pipeline model which includes instruction and data memory, 
+and real execution of instructions. The INSTRUCTION_TOKEN_CLASS handles
+creation of DRAL items.
+
+-----------------------------------
+    HOW TO RUN:
+-----------------------------------
+
+make
+./dreams_test3
+dreams dral_trace.drl.gz
+
+-----------------------------------
+    IN THIS EXAMPLE:
+-----------------------------------
+instruction.h:
+- In the contructor, the ItemTags are set with PC, Opcode information, 
+    and the instruction as a string. 
+
+test3_adf.xml:
+- Note 4 Tagdescriptors Which are used later in ADF
+- Using "If" statements in displayed edges, the item color and shaped is 
+    changed depending on the opcode of the instruction.
+

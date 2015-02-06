@@ -1,0 +1,37 @@
+-----------------------------------
+    EXAMPLE 1: Systolic Array
+-----------------------------------
+
+This example is meant to introduce the idea of a DRAL server and a simple ADF 
+using a systolic array which passes around tokens. The systolic array is a 
+simple pipeline with fetch, execute, and commit stages.
+
+-----------------------------------
+    HOW TO RUN:
+-----------------------------------
+
+make
+./dreams_test1
+dreams -adf test1_adf.xml dral_trace.drl.gz
+
+-----------------------------------
+    IN THIS EXAMPLE:
+-----------------------------------
+dreams_test1.cpp:
+- Note DRAL_SERVER_CLASS, which is used to create DRAL graph and 
+    manage nodes/edges/items. Note that name of trace file is parameter
+- TurnOn(), StartActivity(), TurnOff() start and stop DRAL execution
+    and the writing of trace file
+- Cycle() indicates a new cycle in the performance model
+- Fetch stage creates a new DRAL item, which is assigned tags
+- The items percolate through the DRAL-graph using MoveItem()
+
+test1_adf.xml:
+- Tagdescriptors are required to specify which TAGs are of interest 
+    to Dreams and will be used in the ADF
+- For displayed edges, introduces "item_inside", "shape",  and "fcolor"
+    
+
+
+
+

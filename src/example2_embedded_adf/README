@@ -1,0 +1,26 @@
+-----------------------------------
+    EXAMPLE 2: Embedded ADF
+-----------------------------------
+
+This example is meant to introduce the idea of embedding an ADF file directly 
+into the DRAL trace. Embedding the ADF simplifies opening trace files within 
+Dreams. The Systolic pipline from Example 1 is used.
+
+-----------------------------------
+    HOW TO RUN:
+-----------------------------------
+
+make
+./dreams_test2
+dreams dral_trace.drl.gz
+
+-----------------------------------
+    IN THIS EXAMPLE:
+-----------------------------------
+dreams_test2.cpp:
+- Server->Comment() call, which writes a string into the trace file.
+- Copy the ADF file into a char* array, which is passed into the comment.
+- Designate the comment as an embedded ADF by a special magic number 0xadf.
+
+
+

@@ -1,0 +1,414 @@
+version major 4 minor 0
+newnode FETCH_NODE id 0 parent 0 instance 0
+newnode SCHEDULE_NODE id 1 parent 0 instance 0
+newnode EXECUTE_NODE id 2 parent 1 instance 0
+newnode COMMIT_NODE id 3 parent 2 instance 0
+newnode DONE_NODE id 4 parent 3 instance 0
+newedge FETCH_EDGE from node 0 to node 1 id 0 bw 1 lat 1
+newedge SCHEDULE_EDGE from node 1 to node 2 id 1 bw 1 lat 1
+newedge EXECUTE_EDGE from node 2 to node 3 id 2 bw 1 lat 1
+newedge COMMIT_EDGE from node 3 to node 4 id 3 bw 1 lat 1
+comment 2783 <?xml version="1.0" encoding="ISO8859-1"?>
+<dreams-adf version="2.7">
+	<!-- ............................................................................... -->
+	<!-- .. DRAL Tags Descriptors                                                     .. -->
+	<!-- .. You must specify the name of the TAG and the type. You can also specify   .. -->
+	<!-- .. how you want to display it in the tool if is an integer (base field. The  .. -->
+	<!-- .. default value is 10). autoflush field also can be used, but better don't  .. -->
+	<!-- .. use it if you are not an advanced user.                                   .. -->
+	<!-- .. You just need to specify the tags that appear in the ADF, there's no need .. -->
+	<!-- .. to write other tags. Even if a tag is not specified in the ADF, they will .. -->
+	<!-- .. be stored in the database.                                                .. -->
+	<!-- ............................................................................... -->
+	<tagdescriptor tagname="Instruction" type="string"/>
+	<tagdescriptor tagname="PC" type="integer" base="16"/>
+	<tagdescriptor tagname="OPCODE_STRING" type="string"/>
+	<tagdescriptor tagname="OPCODE_NUM" type="integer" base="16"/>
+	<tagdescriptor tagname="OCCUPANCY" type="integer"/>
+
+	<!-- ............................................................................... -->
+	<!-- .. Shade Table Descriptors                                                   .. -->
+	<!-- .. You might want to color a row using a shade of colors. This descriptors   .. -->
+	<!-- .. specify the different colors of the table (interpolation is automatically .. -->
+	<!-- .. done). Mandatory are the 100% and 0% occupancy, the other occupancies are .. -->
+	<!-- .. optional, and must be written in order.                                   .. -->
+	<!-- ............................................................................... -->
+	<shadetable name="queueOccupancyShading">
+		<shade color="red"    occupancy="100%"/>  <!-- mandatory -->
+		<shade color="yellow" occupancy="50%"/>
+		<shade color="green"  occupancy="0%"/>    <!-- mandatory -->
+	</shadetable>
+
+	<!-- ............................................................................... -->
+	<!-- .. Item window Descriptors                                                   .. -->
+	<!-- .. Item window is used to show a list of items distributted in different     .. -->
+	<!-- .. tabs. The user can specify the coloring with rules, what tabs want and    .. -->
+	<!-- .. what tags of the items show.                                              .. -->
+	<!-- .. A tab has a name and can have some other specifiers to perform a pseudo   .. -->
+	<!-- .. SQL query to the list of items:                                           .. -->
+	<!-- ..  - withtag: only shows items that have the tag defined                    .. -->
+	<!-- ..  - selecttag & value: only shows items that have the tag with the desired .. -->
+	<!-- ..    value. Not compatible with splitby                                     .. -->
+	<!-- ..  - splitby: creates one tab for each of the different values of the tag   .. -->
+	<!-- ..  - orderby: orders the items in the list by the tag value                 .. -->
+	<!-- .. Inside the tab you must specify which item tags you want to see. You do   .. -->
+	<!-- .. it with the show command and the tag name. You can also specify specific  .. -->
+	<!-- .. coloring rules for the tab with the command rule (more about rules later  .. -->
+	<!-- .. in the tutorial.                                                          .. -->
+	<!-- .. Now this specification is used in all the views, but we will support      .. -->
+	<!-- .. different definitions for different views (specially for WaterFall.       .. -->
+	<!-- ............................................................................... -->
+	<itemwindow>
+	   <tab name="Instruction Stream" withtag="Instruction" orderby="ITEMID" >
+		   <rule>
+			   lcolor="blue";
+		   </rule>
+		   <show itemtag="PC"/>           
+		   <show itemtag="Instruction"/>           
+	   </tab>
+	</itemwindow>
+
+	<!-- ............................................................................... -->
+	<!-- .. 2Dreams Descriptors                                                       .. -->
+	<!-- .. You have 4 different commands in 2Dreams:                                 .. -->
+	<!-- ..  - rule: this command specifies the coloring rules. If the command is     .. -->
+	<!-- ..	written in the 2dreams scope, the rule will affect to all the             .. -->
+	<!-- ..	following rows. Otherwise it will only change the coloring of the         .. -->
+	<!-- ..	current edge or node. The rules follow the C syntax (more or less). As    .. -->
+	<!-- ..	a rule is always computed within an edge or node scope, it have 2         .. -->
+	<!-- ..	basic value accessors:                                                    .. -->
+	<!-- ..	 - itag("TAG"): returns the value of the tag TAG of the item inside       .. -->
+	<!-- ..	   the slot (node or edge). If no item is inside or the item hasn't       .. -->
+	<!-- ..	   the tag defined an undefined is returned and any comparison will       .. -->
+	<!-- ..	   evaluate to false.                                                     .. -->
+	<!-- ..	 - stag("TAG"): returns the value of the tag TAG of the slot. If no       .. -->
+	<!-- ..	   value is defined for this tag in the slot, the behaviour is the        .. -->
+	<!-- ..	   equal to itag.                                                         .. -->
+	<!-- ..	This values can then be compared (==, <=, <, ..) and there's also         .. -->
+	<!-- ..	regular expression support for strings. An important function is          .. -->
+	<!-- ..	item_inside(), that returns if an item is inside the slot. This is        .. -->
+	<!-- ..	typically used in edge rows.                                              .. -->
+	<!-- ..	Then you can set the different coloring fields with instructions that     .. -->
+	<!-- ..	end with ; :                                                              .. -->
+	<!-- ..	  - fcolor: sets the fill color of the event                              .. -->
+	<!-- ..	  - bcolor: sets the border color of the event                            .. -->
+	<!-- ..	  - shape: sets the shape of the event                                    .. -->
+	<!-- ..	  - letter: sets the letter inside the event                              .. -->
+	<!-- ..	  - lcolor: sets the color of the letter of the event                     .. -->
+	<!-- ..	  - bold: sets the type of letter of the event                            .. -->
+	<!-- ..	  - underline: sets the type of letter of the event                       .. -->
+	<!-- ..	  - italic: sets the type of letter of the event                          .. -->
+	<!-- ..  - group: this command creates a new group with a name. This only lets    .. -->
+	<!-- ..	you to fold/unfold (hide-show) the rows defined inside the group.         .. -->
+	<!-- ..  - edge: shows things related to an edge. You must specify the name, the  .. -->
+	<!-- ..	the source and destiny node. Then you specify the specific rules of       .. -->
+	<!-- ..	the edge. In the layout will appear as many rows as the bandwidth of      .. -->
+	<!-- ..	the edge. Edge rules typically start with an if(item_inside()) { } to     .. -->
+	<!-- ..	show just the items that travel through the edge.                         .. -->
+	<!-- ..  - node: shows things related to a node. You just need to specify the     .. -->
+	<!-- ..	node name. They are usually used to show occupancies using shading        .. -->
+	<!-- ..	tables. This type of coloring is called mapping and uses the map rule.    .. -->
+	<!-- ..	You specify a tag, a name of a shading table, the min and max values      .. -->
+	<!-- ..	of the tag (for interpolation purposes) and you will see a shaded row.    .. -->
+	<!-- ............................................................................... -->
+	<dreams2>
+		<group name="Pipeline">
+			<edge name="FETCH_EDGE">
+				<rule>
+					if (item_inside()){
+                        fcolor="green";
+                        shape="rectangle";
+                        if(itag("OPCODE_STRING") == "LD" || itag("OPCODE_STRING") == "ST")
+					    {
+					        shape="circle";
+    					    fcolor="blue";
+					    }
+                        if(itag("OPCODE_STRING") == "BNE" || itag("OPCODE_STRING") == "JMP")
+					    {
+					        shape="triangle";
+    					    fcolor="red";
+					    }
+                    }
+	
+				</rule>
+			</edge>
+			<edge name="SCHEDULE_EDGE">
+				<rule>
+					if (item_inside()){
+                        fcolor="green";
+                        shape="rectangle";
+                        if(itag("OPCODE_STRING") == "LD" || itag("OPCODE_STRING") == "ST")
+					    {
+					        shape="circle";
+    					    fcolor="blue";
+					    }
+                        if(itag("OPCODE_STRING") == "BNE" || itag("OPCODE_STRING") == "JMP")
+					    {
+					        shape="triangle";
+    					    fcolor="red";
+					    }
+                       
+					}
+				</rule>
+			</edge>
+			<edge name="EXECUTE_EDGE">
+				<rule>
+					if (item_inside()){
+                        fcolor="green";
+                        shape="rectangle";
+                        if(itag("OPCODE_STRING") == "LD" || itag("OPCODE_STRING") == "ST")
+					    {
+					        shape="circle";
+    					    fcolor="blue";
+					    }
+                        if(itag("OPCODE_STRING") == "BNE" || itag("OPCODE_STRING") == "JMP")
+					    {
+					        shape="triangle";
+    					    fcolor="red";
+					    }
+                       
+					}
+				</rule>
+			</edge>
+			<edge name="COMMIT_EDGE">
+				<rule>
+					if (item_inside()){
+                        fcolor="green";
+                        shape="rectangle";
+                        if(itag("OPCODE_STRING") == "LD" || itag("OPCODE_STRING") == "ST")
+					    {
+					        shape="circle";
+    					    fcolor="blue";
+					    }
+                        if(itag("OPCODE_STRING") == "BNE" || itag("OPCODE_STRING") == "JMP")
+					    {
+					        shape="triangle";
+    					    fcolor="red";
+					    }
+
+					}
+				</rule>
+			</edge>
+		    <node name="SCHEDULE_NODE">
+
+			    <rule>
+
+				    fcolor = map(stag("OCCUPANCY"), "queueOccupancyShading", 0, 4);
+
+			    </rule>
+
+	    	</node>
+            
+        </group>
+	</dreams2>
+</commentbin 231 (20480 bytes of binary contents not showed)
+startactivity cycle 0
+cycle 0
+setNodeTag 1 OCCUPANCY = 0 at []
+newitem 1
+setItemTag 1 PC = 0
+setItemTagString 1 Instruction = IMM R0, 128
+setItemTagString 1 OPCODE_STRING = IMM
+setItemTag 1 OPCODE_NUM = 3
+moveitems edge 0 items 1
+cycle 1
+moveitems edge 1 items 1
+newitem 2
+setItemTag 2 PC = 1
+setItemTagString 2 Instruction = IMM R1, 1
+setItemTagString 2 OPCODE_STRING = IMM
+setItemTag 2 OPCODE_NUM = 3
+moveitems edge 0 items 2
+cycle 2
+moveitems edge 2 items 1
+moveitems edge 1 items 2
+newitem 3
+setItemTag 3 PC = 2
+setItemTagString 3 Instruction = IMM R2, 2
+setItemTagString 3 OPCODE_STRING = IMM
+setItemTag 3 OPCODE_NUM = 3
+moveitems edge 0 items 3
+cycle 3
+moveitems edge 3 items 1
+moveitems edge 2 items 2
+moveitems edge 1 items 3
+newitem 4
+setItemTag 4 PC = 3
+setItemTagString 4 Instruction = IMM R3, 1
+setItemTagString 4 OPCODE_STRING = IMM
+setItemTag 4 OPCODE_NUM = 3
+moveitems edge 0 items 4
+cycle 4
+deleteitem 1
+moveitems edge 3 items 2
+moveitems edge 2 items 3
+moveitems edge 1 items 4
+newitem 5
+setItemTag 5 PC = 4
+setItemTagString 5 Instruction = IMM R4, 0
+setItemTagString 5 OPCODE_STRING = IMM
+setItemTag 5 OPCODE_NUM = 3
+moveitems edge 0 items 5
+cycle 5
+deleteitem 2
+moveitems edge 3 items 3
+moveitems edge 2 items 4
+moveitems edge 1 items 5
+newitem 6
+setItemTag 6 PC = 5
+setItemTagString 6 Instruction = LD R5, R0
+setItemTagString 6 OPCODE_STRING = LD
+setItemTag 6 OPCODE_NUM = 0
+moveitems edge 0 items 6
+cycle 6
+deleteitem 3
+moveitems edge 3 items 4
+moveitems edge 2 items 5
+moveitems edge 1 items 6
+newitem 7
+setItemTag 7 PC = 6
+setItemTagString 7 Instruction = ADD R5, R5, R3
+setItemTagString 7 OPCODE_STRING = ADD
+setItemTag 7 OPCODE_NUM = 2
+moveitems edge 0 items 7
+cycle 7
+deleteitem 4
+moveitems edge 3 items 5
+moveitems edge 2 items 6
+setNodeTag 1 OCCUPANCY = 1 at []
+newitem 8
+setItemTag 8 PC = 7
+setItemTagString 8 Instruction = ST R5, R0
+setItemTagString 8 OPCODE_STRING = ST
+setItemTag 8 OPCODE_NUM = 1
+moveitems edge 0 items 8
+cycle 8
+deleteitem 5
+moveitems edge 3 items 6
+moveitems edge 1 items 7
+newitem 9
+setItemTag 9 PC = 8
+setItemTagString 9 Instruction = ADD R0, R0, R1
+setItemTagString 9 OPCODE_STRING = ADD
+setItemTag 9 OPCODE_NUM = 2
+moveitems edge 0 items 9
+cycle 9
+deleteitem 6
+moveitems edge 2 items 7
+setNodeTag 1 OCCUPANCY = 2 at []
+newitem 10
+setItemTag 10 PC = 9
+setItemTagString 10 Instruction = ADD R4, R4, R3
+setItemTagString 10 OPCODE_STRING = ADD
+setItemTag 10 OPCODE_NUM = 2
+moveitems edge 0 items 10
+cycle 10
+moveitems edge 3 items 7
+moveitems edge 1 items 8
+newitem 11
+setItemTag 11 PC = 10
+setItemTagString 11 Instruction = BNE R4, R2, I5
+setItemTagString 11 OPCODE_STRING = BNE
+setItemTag 11 OPCODE_NUM = 5
+moveitems edge 0 items 11
+cycle 11
+deleteitem 7
+moveitems edge 2 items 8
+moveitems edge 1 items 9
+newitem 12
+setItemTag 12 PC = 11
+setItemTagString 12 Instruction = JMP I4
+setItemTagString 12 OPCODE_STRING = JMP
+setItemTag 12 OPCODE_NUM = 4
+moveitems edge 0 items 12
+cycle 12
+moveitems edge 3 items 8
+moveitems edge 2 items 9
+moveitems edge 1 items 10
+cycle 13
+deleteitem 8
+moveitems edge 3 items 9
+moveitems edge 2 items 10
+cycle 14
+deleteitem 9
+moveitems edge 3 items 10
+moveitems edge 1 items 11
+setNodeTag 1 OCCUPANCY = 1 at []
+cycle 15
+deleteitem 10
+moveitems edge 2 items 11
+exitnode node 1 item 12 slot [1]
+deleteitem 12
+setNodeTag 1 OCCUPANCY = 0 at []
+cycle 16
+moveitems edge 3 items 11
+newitem 13
+setItemTag 13 PC = 5
+setItemTagString 13 Instruction = LD R5, R0
+setItemTagString 13 OPCODE_STRING = LD
+setItemTag 13 OPCODE_NUM = 0
+moveitems edge 0 items 13
+cycle 17
+deleteitem 11
+moveitems edge 1 items 13
+newitem 14
+setItemTag 14 PC = 6
+setItemTagString 14 Instruction = ADD R5, R5, R3
+setItemTagString 14 OPCODE_STRING = ADD
+setItemTag 14 OPCODE_NUM = 2
+moveitems edge 0 items 14
+cycle 18
+moveitems edge 2 items 13
+setNodeTag 1 OCCUPANCY = 1 at []
+newitem 15
+setItemTag 15 PC = 7
+setItemTagString 15 Instruction = ST R5, R0
+setItemTagString 15 OPCODE_STRING = ST
+setItemTag 15 OPCODE_NUM = 1
+moveitems edge 0 items 15
+cycle 19
+moveitems edge 3 items 13
+moveitems edge 1 items 14
+newitem 16
+setItemTag 16 PC = 8
+setItemTagString 16 Instruction = ADD R0, R0, R1
+setItemTagString 16 OPCODE_STRING = ADD
+setItemTag 16 OPCODE_NUM = 2
+moveitems edge 0 items 16
+cycle 20
+deleteitem 13
+moveitems edge 2 items 14
+setNodeTag 1 OCCUPANCY = 2 at []
+newitem 17
+setItemTag 17 PC = 9
+setItemTagString 17 Instruction = ADD R4, R4, R3
+setItemTagString 17 OPCODE_STRING = ADD
+setItemTag 17 OPCODE_NUM = 2
+moveitems edge 0 items 17
+cycle 21
+moveitems edge 3 items 14
+moveitems edge 1 items 15
+newitem 18
+setItemTag 18 PC = 10
+setItemTagString 18 Instruction = BNE R4, R2, I5
+setItemTagString 18 OPCODE_STRING = BNE
+setItemTag 18 OPCODE_NUM = 5
+moveitems edge 0 items 18
+cycle 22
+deleteitem 14
+moveitems edge 2 items 15
+moveitems edge 1 items 16
+newitem 19
+setItemTag 19 PC = 11
+setItemTagString 19 Instruction = JMP I4
+setItemTagString 19 OPCODE_STRING = JMP
+setItemTag 19 OPCODE_NUM = 4
+moveitems edge 0 items 19
+cycle 23
+moveitems edge 3 items 15
+moveitems edge 2 items 16
+moveitems edge 1 items 17
+cycle 24
+deleteitem 15
+moveitems edge 3 items 16
+moveitems edge 2 items 17

@@ -1,0 +1,33 @@
+-----------------------------------
+    EXAMPLE 4: CPU Instruction Queue
+-----------------------------------
+
+This example is meant to introduce the idea of displaying DRAL node 
+occupancy in the trace. The CPU pipeline model from Example 3 is expanded to 
+include a scheduling stage class, which has an instruction queue. Branches 
+now enable the frontend of the pipeline to flush on a successful taken 
+branch, such that the instruction queue fills up and empties over time.
+
+-----------------------------------
+    HOW TO RUN:
+-----------------------------------
+
+make
+./dreams_test4
+dreams dral_trace.drl.gz
+
+-----------------------------------
+    IN THIS EXAMPLE:
+-----------------------------------
+dreams_test4.cpp:
+- Instruction queue size is statically set to 4.
+- Note the SetNodeTag("OCCUPANCY") on the "schedule" node which sets the size 
+of the instruction queue at this clock cycle.   
+
+test4_adf.xml:
+- Inclusion of OCCUPANCY as a Tag of type integer
+- Introduction of shade table "queueOccupancyShading", which is used 
+    for coloring depending on the occupancy
+- Display of SCHEDULE node, using the tag OCCUPANCY, the shade table, and 
+    min and max values of {0,4}
+

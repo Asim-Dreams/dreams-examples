@@ -1,0 +1,96 @@
+#!/usr/bin/perl -w
+
+# proceed to generate the adf
+$num_cpus= $ENV{'PERFMODEL_NUM_CPUS'};
+    
+print  "<?xml version=\"1.0\" encoding=\"ISO8859-1\"?>\n";
+print  "\n";
+print  "<dreams-adf version=\"2.7\">\n";
+print  "	<!-- ............................................................................... -->\n";
+print  "	<!-- .. DRAL Tags Descriptors                                                     .. -->\n";
+print  "	<!-- ............................................................................... -->\n";
+print  "	<tagdescriptor tagname=\"Instruction\" type=\"string\"/>\n";
+print  "	<tagdescriptor tagname=\"PC\" type=\"integer\" base=\"16\"/>\n";
+print  "	<tagdescriptor tagname=\"OPCODE_STRING\" type=\"string\"/>\n";
+print  "	<tagdescriptor tagname=\"OPCODE_NUM\" type=\"integer\" base=\"16\"/>\n";
+print  "\n";
+print  "	<!-- ............................................................................... -->\n";
+print  "	<!-- .. Item window Descriptors                                                   .. -->\n";
+print  "	<!-- ............................................................................... -->\n";
+print  "	<itemwindow>\n";
+print  "	   <tab name=\"Instruction Stream\" withtag=\"Instruction\" orderby=\"ITEMID\" >\n";
+print  "		   <rule>\n";
+print  "			   lcolor=\"blue\";\n";
+print  "		   </rule>\n";
+print  "		   <show itemtag=\"PC\"/>  \n";         
+print  "		   <show itemtag=\"Instruction\"/>   \n";        
+print  "	   </tab>\n";
+print  "	</itemwindow>\n";
+print  "\n";
+print  "	<!-- ............................................................................... -->\n";
+print  "	<!-- .. 2Dreams Descriptors                                                       .. -->\n";
+print  "	<!-- ............................................................................... -->\n";
+print  "	<dreams2>\n";
+
+for (my $id=0; $id < $num_cpus; $id++) {
+    print  "		<group name=\"CPU${id}\">\n";
+    print  "			<edge name=\"FETCH${id}\">\n";
+    print  "				<rule>\n";
+    print  "					if (item_inside()){\n";
+    print  "                       fcolor=\"green\";\n";
+    print  "                        shape=\"rectangle\";\n";
+    print  "                        if(itag(\"OPCODE_STRING\") == \"LD\" || itag(\"OPCODE_STRING\") == \"ST\")\n";
+    print  "					    {\n";
+    print  "					        shape=\"circle\";\n";
+    print  "    					    fcolor=\"blue\";\n";
+    print  "					    }\n";
+    print  "                        if(itag(\"OPCODE_STRING\") == \"BNE\" || itag(\"OPCODE_STRING\") == \"JMP\")\n";
+    print  "					    {\n";
+    print  "					        shape=\"triangle\";\n";
+    print  "    					    fcolor=\"red\";\n";
+    print  "					    }\n";
+    print  "                    }\n";
+    print  "				</rule>\n";
+    print  "			</edge>\n";
+    print  "			<edge name=\"EXECUTE${id}\">\n";
+    print  "				<rule>\n";
+    print  "					if (item_inside()){\n";
+    print  "                       fcolor=\"green\";\n";
+    print  "                        shape=\"rectangle\";\n";
+    print  "                        if(itag(\"OPCODE_STRING\") == \"LD\" || itag(\"OPCODE_STRING\") == \"ST\")\n";
+    print  "					    {\n";
+    print  "					        shape=\"circle\";\n";
+    print  "    					    fcolor=\"blue\";\n";
+    print  "					    }\n";
+    print  "                        if(itag(\"OPCODE_STRING\") == \"BNE\" || itag(\"OPCODE_STRING\") == \"JMP\")\n";
+    print  "					    {\n";
+    print  "					        shape=\"triangle\";\n";
+    print  "    					    fcolor=\"red\";\n";
+    print  "					    }\n";
+    print  "					}\n";
+    print  "				</rule>\n";
+    print  "			</edge>\n";
+    print  "			<edge name=\"COMMIT${id}\">\n";
+    print  "				<rule>\n";
+    print  "					if (item_inside()){\n";
+    print  "                       fcolor=\"green\";\n";
+    print  "                        shape=\"rectangle\";\n";
+    print  "                        if(itag(\"OPCODE_STRING\") == \"LD\" || itag(\"OPCODE_STRING\") == \"ST\")\n";
+    print  "					    {\n";
+    print  "					        shape=\"circle\";\n";
+    print  "    					    fcolor=\"blue\";\n";
+    print  "					    }\n";
+    print  "                        if(itag(\"OPCODE_STRING\") == \"BNE\" || itag(\"OPCODE_STRING\") == \"JMP\")\n";
+    print  "					    {\n";
+    print  "					        shape=\"triangle\";\n";
+    print  "    					    fcolor=\"red\";\n";
+    print  "					    }\n";
+    print  "					}\n";
+    print  "				</rule>\n";
+    print  "			</edge>\n";
+    print  "        </group>\n";
+    print  "            \n";
+}
+print  "	</dreams2>\n";
+print  "</dreams-adf>\n";
+
