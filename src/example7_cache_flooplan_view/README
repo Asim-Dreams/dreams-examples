@@ -1,0 +1,56 @@
+-----------------------------------
+    EXAMPLE 4: Cache Floorplan view
+-----------------------------------
+
+This example is meant to introduce the idea of displaying a DRAL node 
+(in this case, a cache) in a floor plan mode. The CPU pipeline model from 
+Example 3 is expanded to include a cache. In Dreams, the cache is visualized 
+by displaying the sets along the x-axis and the ways along the y-axis. Time 
+is then stepped through using the play buttons in Dreams, such that changes 
+to the cache can be visualized. This example includes visualizing the LRU 
+bits and hits and misses to the cache. 
+
+-----------------------------------
+    HOW TO RUN:
+-----------------------------------
+
+make
+./dreams_test7
+dreams dral_trace.drl.gz
+
+-----------------------------------
+    IN THIS EXAMPLE:
+-----------------------------------
+cache.h:
+- Note the creation of two DRAL nodes In the contructor
+ -- SetNodeLayout() sets the node to be 2D storage with capacity of ways*sets
+- SetNodeTag() is used to update LRU and Hit data 
+ -- The index to update (set / way) is passed as a parameter
+ -- See Init(), Read(), Write() UpdateLRU()
+- CreateAddressTrace() creates an memory access trace which is viewed in Dreams
+
+dreams_test7.cpp:
+- The cache size is 4 ways, 8 sets.
+ -- ADF also assumes this size.
+- Note that the data_cache->Init() is called after server->StartActivity(),
+    so that the initial LRU bits can be fed into the trace
+
+test4_adf.xml:
+- Inclusion of HIT, LRU, Address, and Set as a Tag of type integer
+- Item window displays the memory access (address stream) trace
+ -- Clicking on an item gives details about access (creation) time, etc.
+- "dreams3" indicates we will use floorplan view. 
+ -- There are two tables created for Hits and LRU data
+ -- the "<layout>" command specifies two things
+    --- the way the first dimension should be displayed (as 1x8), where 
+        N * M must be the size of the dimension (8 sets in our example)
+    --- the layout of the second dimension, which is "v" for "Vertical", 
+        and creates rows of the 1x8 (e.g. ways of the cache are rows)
+ - <rule> is used as before to change color and values
+  -- note that "letter" is used with "if" statements to display the LRU value
+
+In Dreams:
+- Use the play (and other) buttons on the quickbar to step through time.
+- Hits: You will initially see misses at various sets in the cache, then hits
+- LRU: You will see LRU values for the array change with time.
+

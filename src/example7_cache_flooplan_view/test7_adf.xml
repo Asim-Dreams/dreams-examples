@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="ISO8859-1"?>
+<dreams-adf version="2.7">
+	<!-- ............................................................................... -->
+	<!-- .. DRAL Tags Descriptors                                                     .. -->
+	<!-- .. You must specify the name of the TAG and the type. You can also specify   .. -->
+	<!-- .. how you want to display it in the tool if is an integer (base field. The  .. -->
+	<!-- .. default value is 10). autoflush field also can be used, but better don't  .. -->
+	<!-- .. use it if you are not an advanced user.                                   .. -->
+	<!-- .. You just need to specify the tags that appear in the ADF, there's no need .. -->
+	<!-- .. to write other tags. Even if a tag is not specified in the ADF, they will .. -->
+	<!-- .. be stored in the database.                                                .. -->
+	<!-- ............................................................................... -->
+    <tagdescriptor tagname="HIT" type="integer"/>
+    <tagdescriptor tagname="LRU" type="integer"/>
+    <tagdescriptor tagname="Address" type="integer"/>
+    <tagdescriptor tagname="Set" type="integer"/>
+
+
+	<!-- ............................................................................... -->
+	<!-- .. Item window Descriptors                                                   .. -->
+	<!-- .. Item window is used to show a list of items distributted in different     .. -->
+	<!-- .. tabs. The user can specify the coloring with rules, what tabs want and    .. -->
+	<!-- .. what tags of the items show.                                              .. -->
+	<!-- .. A tab has a name and can have some other specifiers to perform a pseudo   .. -->
+	<!-- .. SQL query to the list of items:                                           .. -->
+	<!-- ..  - withtag: only shows items that have the tag defined                    .. -->
+	<!-- ..  - selecttag & value: only shows items that have the tag with the desired .. -->
+	<!-- ..    value. Not compatible with splitby                                     .. -->
+	<!-- ..  - splitby: creates one tab for each of the different values of the tag   .. -->
+	<!-- ..  - orderby: orders the items in the list by the tag value                 .. -->
+	<!-- .. Inside the tab you must specify which item tags you want to see. You do   .. -->
+	<!-- .. it with the show command and the tag name. You can also specify specific  .. -->
+	<!-- .. coloring rules for the tab with the command rule (more about rules later  .. -->
+	<!-- .. in the tutorial.                                                          .. -->
+	<!-- .. Now this specification is used in all the views, but we will support      .. -->
+	<!-- .. different definitions for different views (specially for WaterFall.       .. -->
+	<!-- ............................................................................... -->
+	<itemwindow>
+	   <tab name="Address Stream" withtag="Address" orderby="ITEMID" >
+		   <rule>
+			   lcolor="blue";
+		   </rule>
+		   <show itemtag="Address"/>           
+		   <show itemtag="Set"/>           
+	   </tab>
+	</itemwindow>
+
+
+    <!-- ....................................................... -->
+    <!-- .. Descriptors for most common DRAL tags             .. -->    
+    <!-- ....................................................... -->
+    <!-- the dimensions for the horizontal (first) must add up to number of cache sets -->
+    <!-- To define where to place the elements, ADF uses a HTML table. The elements are 
+    defined as rectangles. We can only place one rectangle per table cell. 
+
+    We will visualize the Cache we have previously defined. We define a \em
+    rectangle with name "Cache". We specify the name setting the attribute \em
+    node. The name must match the name given in the simulator. We also wan't to see
+    the name over the node, for that reason we define the attribute title. The
+    title attribute can be set with four different values: north, south, east
+    and west. Each of those values specify where we want the name displayed.
+    Finally we can specify if we want the title displayed inside the node display
+    (titleontop="y") or outside (titleontop="n").
+
+    A node definition must have also how to display all the dimensions it has. In
+    our case, the cache has two dimension. If the first dimension has 256 elements (sets),
+    and we could decide to display it as a square of 16 elements high
+    per 16 elements wide. In each element, we will display, all
+    second dimension elements using a vertical distribution. -->
+
+    <dreams3>
+        <table>
+            <tr>
+                <td>
+                    <rectangle node="CacheHitMiss" title="north" titleontop="n">
+                        <rule>
+                            if(stag("HIT") == 1) { fcolor = "green"; }
+                            if(stag("HIT") == 0) { fcolor = "red"; }
+                        </rule>
+                        <layout>
+                            <dimension value="1x8"/>
+                            <dimension value="v"/>
+                        </layout>
+                    </rectangle>
+                    
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <rectangle node="CacheLRU" title="north" titleontop="n">
+                        <rule>
+                            if(stag("LRU") == 3) { letter = '3'; }
+                            if(stag("LRU") == 2) { letter = '2'; }
+                            if(stag("LRU") == 1) { letter = '1'; }
+                            if(stag("LRU") == 0) { letter = '0'; }
+                            fcolor = "gray";
+                        </rule>
+                        <layout>
+                            <dimension value="1x8"/>
+                            <dimension value="v"/>
+                        </layout>
+                    </rectangle>                    
+                </td>
+            </tr>
+        </table>
+
+    </dreams3>
+    
+</dreams-adf>
