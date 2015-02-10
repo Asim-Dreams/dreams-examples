@@ -12,6 +12,9 @@
 #define MAX_CYCLES 25
 #define NUM_CORES 2
 
+DRAL_SERVER INSTRUCTION_TOKEN_CLASS::dral_server = NULL;
+DRAL_SERVER CORE_CLASS::server = NULL;
+
 int main(){
 
     // ******** Performance Model Declaration / Initialization
@@ -23,6 +26,8 @@ int main(){
     //instantiate a dral server to generate files
     //string is name of output file
     auto server = new DRAL_SERVER_CLASS("dral_trace");
+    INSTRUCTION_TOKEN_CLASS::dral_server = server;
+    CORE_CLASS::server = server;
 
     //Enable events to be written/captured by the server
     server->TurnOn(); 
@@ -46,7 +51,7 @@ int main(){
 
     auto cores = new CORE[NUM_CORES]; 
     for (int i=0; i<NUM_CORES; i++){
-        cores[i] = new CORE_CLASS(i, instruction_memory, data_memory, server);
+        cores[i] = new CORE_CLASS(i, instruction_memory, data_memory);
     }
 
     //Write a SetEnv in Dreams using a comment

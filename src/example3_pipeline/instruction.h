@@ -27,23 +27,22 @@ class INSTRUCTION_TOKEN_CLASS
 {
 
     public:
+        static DRAL_SERVER dral_server;
+
         OPCODE op;
         int    reg_dst;
         int    reg_srca;
         int    reg_srcb; 
         int    imm;  
         int    target;  
-
-    private:
         int    pc;
 
     private:
-        DRAL_SERVER dral_server;
         UINT32 dral_item;
 
 
     public:
-        INSTRUCTION_TOKEN_CLASS(int new_pc, const char* new_instr, DRAL_SERVER new_server)
+        INSTRUCTION_TOKEN_CLASS(int new_pc, const char* new_instr)
         : reg_dst(-1), reg_srca(-1), reg_srcb(-1), imm(-1), target(-1) {
             
             //set local performance model information
@@ -98,7 +97,6 @@ class INSTRUCTION_TOKEN_CLASS
 
     
             //set up dreams server information
-            dral_server = new_server;
             dral_item = dral_server->NewItem();
             dral_server->SetItemTag (dral_item, "PC", new_pc);
             dral_server->SetItemTag (dral_item, "Instruction", new_instr);

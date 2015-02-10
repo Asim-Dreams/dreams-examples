@@ -7,7 +7,8 @@
 class CORE_CLASS {
     
     public:
-
+       //DRAL data structures
+        static DRAL_SERVER server;
     private:
 
         int id;
@@ -30,8 +31,7 @@ class CORE_CLASS {
 
         DATA_MEMORY data_memory;
 
-        //DRAL data structures
-        DRAL_SERVER server;
+ 
 
          // Create the nodes of the pipeline
         UINT16 fetch;
@@ -46,14 +46,13 @@ class CORE_CLASS {
        
 
     public:
-        CORE_CLASS(int new_id, string* new_instruction_memory, DATA_MEMORY new_data_memory, DRAL_SERVER new_server) {
+        CORE_CLASS(int new_id, string* new_instruction_memory, DATA_MEMORY new_data_memory) {
             id = new_id;
             PC = 0;
             regfile  = new int[8]; // rf size is 8 entries
 
             data_memory = new_data_memory;
             instruction_memory = new_instruction_memory;
-            server = new_server;
 
             fetch_inst = NULL;
             execute_inst = NULL;
@@ -138,7 +137,7 @@ class CORE_CLASS {
             }
 
             // Handle fetch of instruction
-            fetch_inst = new INSTRUCTION_TOKEN_CLASS(PC, instruction_memory[PC].c_str(), server);
+            fetch_inst = new INSTRUCTION_TOKEN_CLASS(PC, instruction_memory[PC].c_str());
 
             PC = (PC+1);
             server->MoveItem(fetch2execute, fetch_inst->GetDralItem());

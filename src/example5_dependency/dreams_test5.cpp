@@ -12,6 +12,8 @@
 #define MAX_CYCLES 25
 #define IQUEUE_SIZE 4
 
+DRAL_SERVER INSTRUCTION_TOKEN_CLASS::dral_server = NULL;
+
 int main(){
 
     // ******** Performance Model Declaration / Initialization
@@ -23,6 +25,7 @@ int main(){
     //instantiate a dral server to generate files
     //string is name of output file
     auto server = new DRAL_SERVER_CLASS("dral_trace");
+    INSTRUCTION_TOKEN_CLASS::dral_server = server;
 
     //Enable events to be written/captured by the server
     server->TurnOn(); 
@@ -203,7 +206,7 @@ int main(){
 
 	// Handle fetch of instruction
         if (frontend_flush != true && instruction_queue->IsFull() == false && PC < program_size) {
-            fetch_inst = new INSTRUCTION_TOKEN_CLASS(PC, instruction_memory[PC].c_str(), server);
+            fetch_inst = new INSTRUCTION_TOKEN_CLASS(PC, instruction_memory[PC].c_str());
 
             PC = (PC+1) % program_size;
             server->MoveItem(fetch2schedule, fetch_inst->GetDralItem());

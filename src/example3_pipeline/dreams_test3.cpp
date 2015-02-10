@@ -10,6 +10,8 @@
 
 #define MAX_CYCLES 25
 
+DRAL_SERVER INSTRUCTION_TOKEN_CLASS::dral_server = NULL;
+
 int main(){
 
     // ******** Performance Model Declaration / Initialization
@@ -21,6 +23,7 @@ int main(){
     //instantiate a dral server to generate files
     //string is name of output file
     auto server = new DRAL_SERVER_CLASS("dral_trace");
+    INSTRUCTION_TOKEN_CLASS::dral_server = server;
 
     //Enable events to be written/captured by the server
     server->TurnOn(); 
@@ -145,7 +148,7 @@ int main(){
 
 	// Handle fetch of instruction
         if (branch_taken == false){
-            fetch_inst = new INSTRUCTION_TOKEN_CLASS(PC, instruction_memory[PC].c_str(), server);
+            fetch_inst = new INSTRUCTION_TOKEN_CLASS(PC, instruction_memory[PC].c_str());
 
             PC = (PC+1);
             server->MoveItem(fetch2execute, fetch_inst->GetDralItem());
