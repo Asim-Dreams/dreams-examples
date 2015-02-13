@@ -1,0 +1,17 @@
+-----------------------------------
+    EXAMPLE 7: ADF embedded in C++
+-----------------------------------
+
+This example is meant to introduce the idea of embedding the entire text
+of the adf file in a .cpp file. In this case the perl script adf2c converts
+the xml adf into a .cpp file with a routine add_adf() that adds the adf file
+into the trace. Otherwise the example is the same as Example 3.
+
+-----------------------------------
+    HOW TO RUN:
+-----------------------------------
+
+make
+./dreams_test7
+dreams dral_trace.drl.gz
+

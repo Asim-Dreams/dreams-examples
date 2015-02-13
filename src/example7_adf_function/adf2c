@@ -1,0 +1,30 @@
+#!/usr/bin/perl
+
+use strict;
+use warnings;
+
+my @c = <STDIN>;
+print "#pragma GCC diagnostic ignored \"-Wwrite-strings\"\n\n";
+print "#define HOST_LINUX\n\n";
+print "#include <asim/syntax.h>\n";
+print "#include <asim/dralServer.h>\n\n";
+
+print "void add_adf(DRAL_SERVER_CLASS *server)\n";
+print "{\n";
+
+print "char* adf = {\n";
+foreach (@c) {
+    my @s = split('');
+    print qq(\t");
+    printf("\\x%02x", ord($_)) foreach @s;
+    print qq("\n);
+}
+print "\t\"\\x00\"\n";
+print "};\n\n";
+
+print "//- create comment with \"magic number\" 0xadf to identify as adf file\n";
+print "server->Comment (0x0adf, adf, true);\n";
+
+print "}\n";
+
+
