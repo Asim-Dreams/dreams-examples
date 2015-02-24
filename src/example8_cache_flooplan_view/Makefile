@@ -1,4 +1,4 @@
-TARGET = dreams_test7
+TARGET = dreams_test8
 CXXFLAGS = -std=c++0x -g
 
 $(TARGET): $(TARGET).o

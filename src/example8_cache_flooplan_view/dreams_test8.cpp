@@ -70,7 +70,7 @@ int main(){
     //Embed the ADF
     //- write the xml into a char string
     //- create comment with "magic number" 0xadf to identify as adf file
-    FILE *f = fopen("test7_adf.xml", "rb");
+    FILE *f = fopen("test8_adf.xml", "rb");
     fseek(f, 0, SEEK_END);
     long fsize = ftell(f);
     fseek(f, 0, SEEK_SET);

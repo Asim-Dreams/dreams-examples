@@ -1,5 +1,5 @@
 -----------------------------------
-    EXAMPLE 4: Cache Floorplan view
+    EXAMPLE 8: Cache Floorplan view
 -----------------------------------
 
 This example is meant to introduce the idea of displaying a DRAL node 
@@ -15,7 +15,7 @@ bits and hits and misses to the cache.
 -----------------------------------
 
 make
-./dreams_test7
+./dreams_test8
 dreams dral_trace.drl.gz
 
 -----------------------------------
@@ -29,13 +29,13 @@ cache.h:
  -- See Init(), Read(), Write() UpdateLRU()
 - CreateAddressTrace() creates an memory access trace which is viewed in Dreams
 
-dreams_test7.cpp:
+dreams_test8.cpp:
 - The cache size is 4 ways, 8 sets.
  -- ADF also assumes this size.
 - Note that the data_cache->Init() is called after server->StartActivity(),
     so that the initial LRU bits can be fed into the trace
 
-test4_adf.xml:
+test8_adf.xml:
 - Inclusion of HIT, LRU, Address, and Set as a Tag of type integer
 - Item window displays the memory access (address stream) trace
  -- Clicking on an item gives details about access (creation) time, etc.
