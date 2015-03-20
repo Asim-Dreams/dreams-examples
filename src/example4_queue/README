@@ -12,7 +12,7 @@ branch, such that the instruction queue fills up and empties over time.
     HOW TO RUN:
 -----------------------------------
 
-make
+scons -u
 ./dreams_test4
 dreams dral_trace.drl.gz
 

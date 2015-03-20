@@ -3,11 +3,13 @@
 \#*#
 
 # Generated files
+.sconsign.dblite
 *.o
 *.pyc
 
 # Dral traces
 dral_trace.drl.gz
+
 
 
 

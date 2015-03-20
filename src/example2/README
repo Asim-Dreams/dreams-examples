@@ -1,8 +1,8 @@
 
 HOW TO:
 
-make
+scons -u
 ./dreams_test2
- dreams -adf test2_adf.xml dral_trace.drl.gz
+dreams -adf test2_adf.xml dral_trace.drl.gz
 
 

@@ -14,7 +14,7 @@ bits and hits and misses to the cache.
     HOW TO RUN:
 -----------------------------------
 
-make
+scons -u
 ./dreams_test8
 dreams dral_trace.drl.gz
 

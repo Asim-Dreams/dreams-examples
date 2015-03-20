@@ -10,7 +10,7 @@ simple pipeline with fetch, execute, and commit stages.
     HOW TO RUN:
 -----------------------------------
 
-make
+scons -u
 ./dreams_test1
 dreams -adf test1_adf.xml dral_trace.drl.gz
 
