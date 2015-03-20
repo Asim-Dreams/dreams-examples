@@ -1,0 +1,14 @@
+Import('env')
+
+sources = ['dreams_test7.cpp', 'dreams_test7_adf.cpp']
+target = 'dreams_test7'
+
+# Describe building C++ class from ADF
+env.Adf2c('dreams_test7_adf.cpp', 'dreams_test7_adf.xml')
+
+# Build it
+objects = env.Object(source = sources)
+t =  env.Program( target = target, source = objects)
+
+Clean(t, 'dral_trace.drl.gz')
+Default(t)

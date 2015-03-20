@@ -1,0 +1,15 @@
+Import('env')
+
+subdirs = [ 'example1_systolic',
+            'example2_embedded_adf',
+            'example3_pipeline',
+            'example4_queue',
+            'example5_dependency',
+            'example6_mp',
+            'example7_adf_function',
+            'example8_cache_flooplan_view'
+           ]
+
+for subdir in subdirs:
+    env.SConscript('%s/SConscript' % subdir, {'env': env})
+

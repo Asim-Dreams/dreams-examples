@@ -1,0 +1,11 @@
+Import('env')
+
+sources = ['dreams_test2.cpp']
+target = 'dreams_test2'
+
+# Build it
+objects = env.Object(source = sources)
+t =  env.Program( target = target, source = objects)
+
+Clean(t, 'dral_trace.drl.gz')
+Default(t)
